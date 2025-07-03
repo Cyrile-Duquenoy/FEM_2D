@@ -9,7 +9,6 @@ import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     
-    # Création des nœuds et des triangles
     n1 = Node(0, 0, ids=1)
     n2 = Node(0, 1, ids=2)
     n3 = Node(1, 0, ids=3)
@@ -48,7 +47,7 @@ if __name__ == "__main__":
     for tri_id, voisine_ids in neighbours.items():
         print(f"Triangle {tri_id} a pour voisins : {voisine_ids}")
 
-    # 💡 Assemblage FEM : matrice de raideur
+    # Assemblage FEM : matrice de raideur
     n_nodes = len(mesh.get_nodes())
     K_global = np.zeros((n_nodes, n_nodes))
     F_global = np.zeros(n_nodes)
@@ -87,16 +86,16 @@ if __name__ == "__main__":
     print(U)
     
     
-    # Récupérer les coordonnées des noeuds dans des tableaux x, y
+    # Récupére les coord des noeuds
     x = np.array([node.get_coord()[0] for node in nodes])
     y = np.array([node.get_coord()[1] for node in nodes])
     
-    # Récupérer la connectivité des triangles (indices des noeuds)
+    # Récupére connectivité triangles (indices des noeuds)
     triangles = np.array([[node.get_ids()-1 for node in tri._nodes] for tri in elements])
     
     plt.figure(figsize=(6,5))
     
-    # Plot de la solution nodale avec interpolation sur les triangles
+    # Plot solution nodale avec interpolation sur triangles
     plt.tricontourf(x, y, triangles, U, cmap='viridis')
     plt.colorbar(label='Solution U')
     plt.title("Solution FEM (P1) sur le maillage")
