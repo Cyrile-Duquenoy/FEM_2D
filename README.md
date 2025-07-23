@@ -4,6 +4,6 @@
 
 ## Comparaison FreeFem
 
-![Résultat FEM 2D](images/sol_python.png)  
+<img src="images/sol_python.png" alt="Résultat FEM 2D" width="400" style="display:inline-block; margin-right:20px;">
+<img src="images/sol_FreeFem.png" alt="Résultat FreeFem 2D" width="400" style="display:inline-block;">
 
-![Résultat FreeFem 2D](images/sol_FreeFem.png)
