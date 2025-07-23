@@ -5,10 +5,10 @@ from .triangle import Triangle
 
 
 class Mesh:
-    def __init__(self):
-        self._nodes = []
-        self._elements = []
-        self._segments = []
+    def __init__(self, nodes: list = None, elements: list = None, segments: list = None):
+        self._nodes = [] if nodes is None else nodes
+        self._elements = [] if elements is None else elements
+        self._segments = [] if segments is None else segments
         
         
     def add_node(self, node: Node):
@@ -17,8 +17,8 @@ class Mesh:
     def add_element(self, elmt: Element):
         self._elements.append(elmt)
         
-    def add_segment(self):
-        self._segment.append(segment)
+    def add_segment(self, segment: Segment):
+        self._segments.append(segment)
     
     def get_nodes(self):
         return self._nodes
@@ -96,3 +96,11 @@ class Mesh:
                 neighbours[t2].add(t1)
     
         return {k: list(v) for k, v in neighbours.items()}
+    
+    @staticmethod
+    def from_geometry(geometry, **kwargs):
+        from .geometry import Geometry, GEOMETRY_MAPPING
+        if geometry not in GEOMETRY_MAPPING:
+            raise ValueError(f"Géométrie non supportée : {geometry}")
+        mesh_func = GEOMETRY_MAPPING[geometry]
+        return mesh_func(**kwargs)
