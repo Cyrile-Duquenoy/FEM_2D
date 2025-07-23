@@ -1,5 +1,5 @@
 import matplotlib.pyplot as plt
-from core.mesh import Mesh
+from core.geometry.mesh import Mesh
 from typing import Optional, List, Tuple
 from matplotlib.axes import Axes
 

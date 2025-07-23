@@ -1,4 +1,4 @@
-from ..triangle import Triangle
+from ..geometry.triangle import Triangle
 import numpy as np
 
 class P1Element:
@@ -7,6 +7,9 @@ class P1Element:
         self.nodes = triangle._nodes
         self.coords = np.array([node.get_coord() for node in self.nodes])
         self.grad_phi, self.area = self.compute_shape_gradients()
+        
+        if self.area <= 0:
+            print(f"Warning: Triangle with negative/zero area: {self.area}")
 
     def compute_shape_gradients(self):
         """
@@ -20,12 +23,15 @@ class P1Element:
         ])
         detJ = np.linalg.det(J)
         area = 0.5 * abs(detJ)
+        
+        if abs(detJ) < 1e-12:
+            raise ValueError("Triangle dégénéré (aire nulle)")
 
-        # Gradients des fonctions de forme de référence (tri unité)
+        # Gradients des fonctions de forme de référence (tri unité)      
         grad_ref = np.array([
             [-1, -1],
-            [1, 0],
-            [0, 1]
+            [0, 1],
+            [1, 0]
         ])
 
         invJT = np.linalg.inv(J).T
@@ -35,7 +41,7 @@ class P1Element:
 
     def stiffness_matrix(self):
         """
-        Matrice de raideur locale 3x3 : K_ij = (grad phi_i . grad phi_j) * area
+        Matrice de raideur locale 3x3
         """
         K = np.zeros((3, 3))
         for i in range(3):
@@ -45,14 +51,13 @@ class P1Element:
 
     def mass_matrix(self):
         """
-        Matrice de masse locale 3x3 (P1):
-        M_ij = area / 12 si i != j
-        M_ii = area / 6
+        Matrice de masse locale
         """
         A = self.area
         M = np.full((3, 3), A / 12)
         np.fill_diagonal(M, A / 6)
         return M
+    
 
 
 

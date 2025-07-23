@@ -1,6 +1,7 @@
-from .node import Node
-from .element import Element
-from .segment import Segment
-from .triangle import Triangle
-from .mesh import Mesh
+from .geometry.node import Node
+from .geometry.element import Element
+from .geometry.segment import Segment
+from .geometry.triangle import Triangle
+from .geometry.mesh import Mesh
+from .solver import FEMSolver
 
