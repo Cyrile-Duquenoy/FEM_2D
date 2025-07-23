@@ -4,4 +4,4 @@
 
 ## Comparaison FreeFem
 
-[/imgages/sol_python.png]
+![Résultat FEM 2D](images/sol_python.png)
