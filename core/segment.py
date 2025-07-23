@@ -23,9 +23,6 @@ class Segment(Element):
         return ((x2 - x1)**2 + (y2 - y1)**2)**0.5
     
     def get_normal(self):
-        """
-        Retourne la normale unitaire au segment orienté (n1 -> n2), tournée vers la gauche (normale extérieure)
-        """
         n1, n2 = self._nodes
         x1, y1 = n1.get_coord()
         x2, y2 = n2.get_coord()
