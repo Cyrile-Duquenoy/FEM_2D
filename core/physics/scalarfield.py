@@ -17,7 +17,7 @@ class ScalarField:
                 raise ValueError('len(data) doit être égal au nombre de noeuds')
             self._data = data
         else:
-            self._data = [0.0] * len(mesh.get_nodes())  # exemple d'initialisation par défaut
+            self._data = [0.0] * len(mesh.get_nodes())
     
     
     def plot(self, cmap='viridis', method='surface', show=True):
@@ -51,3 +51,4 @@ class ScalarField:
     
 
     
+
