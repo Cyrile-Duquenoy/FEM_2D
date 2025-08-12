@@ -2,12 +2,39 @@ from .node import Node
 from .element import Element
 from .segment import Segment
 
+
+def reorder_triangle_nodes(n1, n2, n3):
+    pts = [n1, n2, n3]
+    
+    # Trouve le point avec le plus petit (x,y)
+    anchor = min(pts, key=lambda n: n.get_coord())
+    pts.remove(anchor)
+    o1, o2 = pts
+
+    ax, ay = anchor.get_coord()
+    x1, y1 = o1.get_coord()
+    x2, y2 = o2.get_coord()
+
+    det = (x1 - ax)*(y2 - ay) - (y1 - ay)*(x2 - ax)
+    if abs(det) < 1e-15:
+        raise ValueError("Triangle invalide : sommets alignés")
+
+    if det < 0:
+        o1, o2 = o2, o1
+
+    return anchor, o1, o2
+
+
 class Triangle(Element):
     
     _registry = []
     
     def __init__(self, n1: Node, n2: Node, n3: Node, ids: int = 0):
+        
+        n1, n2, n3 = reorder_triangle_nodes(n1, n2, n3)
+            
         super().__init__([n1, n2, n3], ids)
+        
         self._faces = [
             (n1, n2),
             (n1, n3),
@@ -41,5 +68,9 @@ class Triangle(Element):
     @classmethod 
     def reset_registry(cls):
         cls._registry = []
+        
+        
+
+    
 
 

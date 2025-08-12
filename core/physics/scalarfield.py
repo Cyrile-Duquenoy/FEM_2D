@@ -1,8 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-
-
 from ..geometry.mesh import Mesh
 
 import matplotlib.tri as tri
@@ -17,7 +15,7 @@ class ScalarField:
                 raise ValueError('len(data) doit être égal au nombre de noeuds')
             self._data = data
         else:
-            self._data = [0.0] * len(mesh.get_nodes())
+            self._data = [0.0] * len(mesh.get_nodes())  # exemple d'initialisation par défaut
     
     
     def plot(self, cmap='viridis', method='surface', show=True):
@@ -51,4 +49,3 @@ class ScalarField:
     
 
     
-

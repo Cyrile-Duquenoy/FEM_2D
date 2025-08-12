@@ -2,14 +2,15 @@ from .node import Node
 from .element import Element
 from .segment import Segment
 from .triangle import Triangle
+from .element import Element
 
+import numpy as np
 
 class Mesh:
-    def __init__(self, nodes: list = None, elements: list = None, segments: list = None):
+    def __init__(self, nodes: list[Node] = None, elements: list[Element] = None):
         self._nodes = [] if nodes is None else nodes
         self._elements = [] if elements is None else elements
-        self._segments = [] if segments is None else segments
-        
+        self._segments = self.set_all_segments()
         
     def add_node(self, node: Node):
         self._nodes.append(node)
@@ -27,40 +28,71 @@ class Mesh:
         return self._elements
     
     def get_segments(self):
-        return self._segments
+        N = [seg for seg in self._segments]
+        return N
+    
+    def set_all_segments(self):
+        seen_edges = {}
         
+        for element in self._elements:
+            nodes = element.get_nodes()
+            num_nodes = len(nodes)
+            
+            for i in range(num_nodes):
+                n1 = nodes[i]
+                n2 = nodes[(i + 1) % num_nodes]  # suivant, en bouclant
+                edge_key = tuple(sorted((n1.get_ids(), n2.get_ids())))
+                
+                if edge_key not in seen_edges:
+                    seen_edges[edge_key] = (n1, n2)
+        
+        return [Segment(n1, n2) for n1, n2 in seen_edges.values()]
+
     def get_boundary_segments(self):
         from collections import defaultdict
-    
+        
         segment_count = defaultdict(int)
         segment_map = {}
-    
+        
         for element in self._elements:
             if not isinstance(element, Triangle):
                 continue
-    
+            
             nodes = element.get_nodes()
             edges = [
                 (nodes[0], nodes[1]),
                 (nodes[1], nodes[2]),
                 (nodes[2], nodes[0])
             ]
-    
+            
             for n1, n2 in edges:
-                # Tri des IDs pour que l’ordre n’ait pas d’importance
                 id_pair = tuple(sorted((n1.get_ids(), n2.get_ids())))
                 segment_count[id_pair] += 1
                 if id_pair not in segment_map:
                     segment_map[id_pair] = (n1, n2)
-    
-        self._segments = []
+        
+        boundary_segments = []
         for id_pair, count in segment_count.items():
             if count == 1:
                 n1, n2 = segment_map[id_pair]
-                self._segments.append(Segment(n1, n2))
-    
-        return self._segments
-    
+                
+                # Chercher un segment déjà existant avec ces deux nodes
+                existing = next(
+                    (seg for seg in self._segments 
+                     if {n.get_ids() for n in seg.get_nodes()} == {n1.get_ids(), n2.get_ids()}),
+                    None
+                )
+                
+                if existing:
+                    segment = existing
+                else:
+                    segment = Segment(n1, n2)
+                
+                segment._boundary = True
+                
+                boundary_segments.append(segment)
+        
+        return boundary_segments
 
     def get_connectivity_matrix(self):
         connectivity = []

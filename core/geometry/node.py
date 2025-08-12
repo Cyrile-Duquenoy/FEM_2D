@@ -5,11 +5,11 @@ class Node:
     
     _registry = {}  # dictionnaire coord -> node
     
-    def __init__(self, x: float, y: float, z: float = None, ids: int = None):
+    def __init__(self, x: float, y: float, ids: int = None, is_boundary: bool = False):
         self._x = x
         self._y = y
-        self._z = z
         self.ids = ids
+        self._is_boundary = is_boundary
         
         key = self.get_coord()
         
@@ -25,14 +25,8 @@ class Node:
         return self.ids
         
     def get_coord(self):
-        if self._z is None:
             return (self._x, self._y)
-        else:
-            return (self._x, self._y, self._z)
-    
-    def get_dimension(self):
-        return 2 if self._z is None else 3
-        
+
     @classmethod 
     def all_nodes(cls):
         return list(cls._registry.values())
@@ -40,8 +34,16 @@ class Node:
     @classmethod 
     def reset_registry(cls):
         cls._registry = {}
-        
+    
+    @classmethod
+    def get_node(cls, x: float, y: float):
+        key = (x, y)
+        return cls._registry.get(key, None)
+    
     def __str__(self):
+        return f'Node(id={self.ids}, coord={self.get_coord()})'
+    
+    def __repr__(self):
         return f'Node(id={self.ids}, coord={self.get_coord()})'
 
         
