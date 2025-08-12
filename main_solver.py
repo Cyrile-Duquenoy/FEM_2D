@@ -22,13 +22,6 @@ Node.reset_registry()
 
 mesh = Mesh.from_geometry(Geometry.SQUARE, h=h, l=l, n=n)
 
-#for i, node in enumerate(mesh.get_nodes()):
-    #node.set_ids(i) # Re-indexer les IDs de 0 à num_nodes-1
-
-
-mesh.get_boundary_segments()
-
-
 #%%
 # Coefficient de diffusion
 def k_coefficient(x, y):
@@ -41,46 +34,26 @@ def source_term(x, y):
 
 #%% Conditions Limites
 
-# Dirichlet
+dirichlet_value = 0
 dirichlet_bcs = {}
-
-
-# Bord gauche (x=0)
-for node in mesh.get_nodes():
-    x, y = node.get_coord()
-    if np.isclose(x, 0.0):# or np.isclose(0.0, y):
-        dirichlet_bcs[node.get_ids()] = 0.0
-    elif np.isclose(x, 1.0):# or np.isclose(1.0, y):
-        dirichlet_bcs[node.get_ids()] = 0.0
-
-
-# Neumann (flux = 0 sur les bords haut et bas)
-neumann_bcs = {}
-# Exemple: flux = 5 sur le bord supérieur (y=1)
-#for segment in mesh.get_boundary_segments():
-#     n1, n2 = segment.get_nodes()
-#     x1, y1 = n1.get_coord()
-#     x2, y2 = n2.get_coord()
-#     if np.isclose(y1, 1.0) and np.isclose(y2, 1.0): # Segment sur le bord supérieur
-#         neumann_bcs[segment.get_ids()] = 5.0
-
+boundary_segments = mesh.get_boundary_segments()
+for segment in boundary_segments:
+    tag = getattr(segment, 'tag', None)
+    value = dirichlet_value
+    for node in segment.get_nodes():
+        dirichlet_bcs[node.get_ids()] = value
 
 #%% Initialiser et exécuter le solveur
 solver = FEMSolver(mesh)
 solver.assemble_system(k_coefficient=k_coefficient, source_term_func=source_term)
-solver.apply_boundary_conditions(dirichlet_bcs=dirichlet_bcs, neumann_bcs=neumann_bcs)
+solver.apply_boundary_conditions(dirichlet_bcs=dirichlet_bcs)
 solution = solver.solve()
 
-print("Solution calculée aux nœuds (premières 10 valeurs):")
-print(solution[:10])
-
 #%% Post-traitement et visualisation
-
 
 F = ScalarField(mesh, solution)
 F.plot(method='scatter')
 F.plot()
-
 
 
 
