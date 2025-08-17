@@ -34,7 +34,6 @@ class ScalarField:
         else:
             import matplotlib.tri as tri
             triangles = np.array([[node.get_ids() - 1 for node in element._nodes] for element in self._mesh.get_elements()])
-            print('len triangles', len(triangles))
             triangulation = tri.Triangulation(x, y, triangles)
             contour = plt.tricontourf(triangulation, c, levels=20, cmap=cmap)
             plt.colorbar(contour, label='Valeur du champ scalaire')

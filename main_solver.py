@@ -32,17 +32,20 @@ mesh.get_boundary_segments()
 #%%
 # Coefficient de diffusion
 def k_coefficient(x, y):
-    return 1.0 # Coefficient constant pour l'exemple
+    #return 1.0 # Coefficient constant pour l'exemple
+    return 1
 
 # Terme source
 def source_term(x, y):
-    # Exemple: f(x,y) = 10
+    # Exemple: f(x,y) = 1
     return 1
+    #return np.sin(np.pi * x) * np.sin(np.pi * y)
 
 #%% Conditions Limites
 
 # Dirichlet
 dirichlet_bcs = {}
+<<<<<<< Updated upstream
 
 
 # Bord gauche (x=0)
@@ -64,6 +67,19 @@ neumann_bcs = {}
 #     if np.isclose(y1, 1.0) and np.isclose(y2, 1.0): # Segment sur le bord supérieur
 #         neumann_bcs[segment.get_ids()] = 5.0
 
+=======
+boundary_segments = [seg for seg in mesh.get_segments() if seg.is_boundary()]
+bounds = [seg for seg in boundary_segments if ((seg.get_tag() == (str('boundary_2'))) or (seg.get_tag() == str('boundary_3'))) ]
+print(bounds)
+for seg in bounds:
+    print(seg.get_tag())
+
+for segment in bounds:
+    tag = getattr(segment, 'tag', None)
+    value = dirichlet_value
+    for node in segment.get_nodes():
+        dirichlet_bcs[node.get_ids()] = value
+>>>>>>> Stashed changes
 
 #%% Initialiser et exécuter le solveur
 solver = FEMSolver(mesh)
@@ -78,9 +94,19 @@ print(solution[:10])
 
 
 F = ScalarField(mesh, solution)
-F.plot(method='scatter')
+#F.plot(method='scatter')
 F.plot()
 
+#plot_mesh(mesh)
 
+'''
+boundary_segs = [seg for seg in mesh.get_segments() if seg.is_boundary()]
+print(f"Nombre de segments de bord : {len(boundary_segs)}")
+for seg in boundary_segs:
+    print('\n', seg)
 
+<<<<<<< Updated upstream
 
+=======
+'''
+>>>>>>> Stashed changes

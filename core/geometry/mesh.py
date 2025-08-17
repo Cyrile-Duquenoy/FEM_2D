@@ -3,6 +3,11 @@ from .element import Element
 from .segment import Segment
 from .triangle import Triangle
 
+<<<<<<< Updated upstream
+=======
+import numpy as np
+import networkx as nx  # utile pour gérer le graphe
+>>>>>>> Stashed changes
 
 class Mesh:
     def __init__(self, nodes: list = None, elements: list = None, segments: list = None):
@@ -27,6 +32,7 @@ class Mesh:
         return self._elements
     
     def get_segments(self):
+<<<<<<< Updated upstream
         return self._segments
         
     def get_boundary_segments(self):
@@ -34,6 +40,16 @@ class Mesh:
     
         segment_count = defaultdict(int)
         segment_map = {}
+=======
+        N = [seg for seg in self._segments]
+        return N
+    
+    def set_all_segments(self):
+        from collections import defaultdict
+    
+        seen_edges = {}
+        segment_count = defaultdict(int)
+>>>>>>> Stashed changes
     
         for element in self._elements:
             if not isinstance(element, Triangle):
@@ -47,6 +63,7 @@ class Mesh:
             ]
     
             for n1, n2 in edges:
+<<<<<<< Updated upstream
                 # Tri des IDs pour que l’ordre n’ait pas d’importance
                 id_pair = tuple(sorted((n1.get_ids(), n2.get_ids())))
                 segment_count[id_pair] += 1
@@ -61,6 +78,23 @@ class Mesh:
     
         return self._segments
     
+=======
+                edge_key = tuple(sorted((n1.get_ids(), n2.get_ids())))
+                if edge_key not in seen_edges:
+                    seen_edges[edge_key] = (n1, n2)
+                segment_count[edge_key] += 1
+    
+        segments = []
+        for i, (edge_key, (n1, n2)) in enumerate(seen_edges.items()):
+            is_boundary = segment_count[edge_key] == 1
+            seg = Segment(n1, n2, ids=i+1, is_boundary=is_boundary)
+            segments.append(seg)
+    
+        return segments
+    
+    def get_boundary_segments(self):
+        return [s for s in self.get_segments() if s.is_boundary()]
+>>>>>>> Stashed changes
 
     def get_connectivity_matrix(self):
         connectivity = []
@@ -96,6 +130,56 @@ class Mesh:
                 neighbours[t2].add(t1)
     
         return {k: list(v) for k, v in neighbours.items()}
+    
+    
+
+    def assign_connected_aligned_tags(self):
+        boundary_segments = self.get_boundary_segments()
+        G = nx.Graph()
+    
+        # Ajouter chaque segment comme noeud dans le graphe (avec son id)
+        for i, seg in enumerate(boundary_segments):
+            G.add_node(i)
+    
+        def are_aligned(seg1, seg2, tol=1e-12):
+            # Vérifie si 2 segments sont alignés (colinéaires)
+            n1a, n1b = seg1.get_nodes()
+            n2a, n2b = seg2.get_nodes()
+    
+            def vector(p1, p2):
+                return p2[0]-p1[0], p2[1]-p1[1]
+    
+            # Vecteurs des 2 segments
+            v1 = vector(n1a.get_coord(), n1b.get_coord())
+            v2 = vector(n2a.get_coord(), n2b.get_coord())
+    
+            # Produit vectoriel = 0 si colinéaires
+            cross = v1[0]*v2[1] - v1[1]*v2[0]
+            return abs(cross) < tol
+    
+        # Créer les arêtes selon les critères
+        for i, seg_i in enumerate(boundary_segments):
+            for j, seg_j in enumerate(boundary_segments):
+                if i >= j:
+                    continue
+                # Vérifier connexion : partagent un noeud ?
+                nodes_i = {n.get_ids() for n in seg_i.get_nodes()}
+                nodes_j = {n.get_ids() for n in seg_j.get_nodes()}
+                if nodes_i.intersection(nodes_j):
+                    # Vérifier alignement
+                    if are_aligned(seg_i, seg_j):
+                        G.add_edge(i, j)
+    
+        # Trouver les composantes connexes
+        connected_components = list(nx.connected_components(G))
+    
+        # Assignation des tags
+        for tag_id, component in enumerate(connected_components, start=1):
+            for seg_idx in component:
+                boundary_segments[seg_idx].set_tag(f"boundary_{tag_id}")
+    
+        return boundary_segments
+
     
     @staticmethod
     def from_geometry(geometry, **kwargs):

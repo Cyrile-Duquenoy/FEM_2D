@@ -12,7 +12,8 @@ class FEMSolver:
         self.num_nodes = len(self.mesh.get_nodes())
         self.K_global = None  
         self.F_global = None  
-        self.U_solution = None 
+        self.U_solution = None
+        self.M_global = None
 
     def assemble_system(self, k_coefficient=1.0, source_term_func=None):
         self.K_global = lil_matrix((self.num_nodes, self.num_nodes))
@@ -53,7 +54,9 @@ class FEMSolver:
                     self.F_global[global_i] += Fe[local_i]
 
         self.K_global = self.K_global.tocsc() # Convertir en format CSC pour la résolution
-        
+
+
+    
     
     def apply_boundary_conditions(self, dirichlet_bcs: dict = None, neumann_bcs: dict = None):
         if dirichlet_bcs is None:
@@ -122,6 +125,9 @@ class FEMSolver:
             return self.U_solution[global_idx]
         else:
             raise ValueError(f"Node with ID {node_id} not found in the mesh.")
+            
+
+
 
 
 

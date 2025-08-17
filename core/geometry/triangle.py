@@ -28,7 +28,7 @@ class Triangle(Element):
         return self._local_ident
 
     def get_area(self):
-        (n1, n2, n3) = self._nodes
+        #(n1, n2, n3) = (self.n1, self.n2, self.n3)
         x1, y1 = n1.get_coord()
         x2, y2 = n2.get_coord()
         x3, y3 = n3.get_coord()
@@ -41,5 +41,15 @@ class Triangle(Element):
     @classmethod 
     def reset_registry(cls):
         cls._registry = []
+<<<<<<< Updated upstream
+=======
+
+
+        
+        
+        
+
+    
+>>>>>>> Stashed changes
 
 

@@ -1,6 +1,25 @@
 from ..geometry.triangle import Triangle
 import numpy as np
 
+<<<<<<< Updated upstream
+=======
+_ref_triangle = None
+
+def get_ref_triangle():
+    global _ref_triangle
+    if _ref_triangle is None:
+        try:
+            _ref_triangle = Triangle(Node(0,0), Node(1,0), Node(0,1))
+        except ValueError:
+            # Node(s) existent déjà, récupère-les depuis la classe Node
+            n0 = Node.get_node(0,0)  # à implémenter : méthode pour récupérer le node existant
+            n1 = Node.get_node(1,0)
+            n2 = Node.get_node(0,1)
+            _ref_triangle = Triangle(n0, n1, n2)
+    return _ref_triangle
+
+
+>>>>>>> Stashed changes
 class P1Element:
     def __init__(self, triangle):
         self.triangle = triangle
@@ -58,6 +77,5 @@ class P1Element:
         np.fill_diagonal(M, A / 6)
         return M
     
-
 
 

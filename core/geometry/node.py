@@ -43,14 +43,27 @@ class Node:
         
     def __str__(self):
         return f'Node(id={self.ids}, coord={self.get_coord()})'
+<<<<<<< Updated upstream
+=======
+    
+    def __repr__(self):
+        return f'Node(id={self.ids}, coord={self.get_coord()})'
+    
+    def dist(self, node: 'Node'):
+        if len(self.get_coord()) != len(node.get_coord()):
+            raise ValueError("Les noeuds doivent être de même dimensions afin de calculer leur distance.")
+        res = 0
+        for i in range(len(node.get_coord())):
+            res += (node.get_coord()[i] - self.get_coord()[i])**2
+        return np.sqrt(res)
+>>>>>>> Stashed changes
 
         
 if __name__ == '__main__':
     n1 = Node(0,0)
     n2 = Node(1,0)
     n3 = Node(0,1)
-    print(n1,n2,n3)
-    
+
 
         
 

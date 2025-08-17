@@ -39,3 +39,6 @@ class Segment(Element):
             raise ValueError("Segment de longueur nulle, normale indéfinie.")
         
         return (nx / norm, ny / norm)
+    
+    def is_boundary(self):
+        return self._boundary
