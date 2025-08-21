@@ -21,8 +21,5 @@ résolvant le problème de Poisson avec second membre `f = 1` et conditions de D
 
 Test réalisé en prenant $f(x,y)=2 \pi^2 sin(\pi x)sin(\pi y)$  
 
-
-<div style="display: flex; gap: 20px;">
-  <img src="images/convergence.png" alt="Résultat FEM 2D" width="400" height="300">
-</div>
+![Convergence test](images/convergence.png)
 
