@@ -38,18 +38,24 @@ def source_term(x, y):
 
 dirichlet_value = 0
 dirichlet_bcs = {}
+
+'''
+
+A utiliser uniquement si même valeur sur tout l'entierté du bord du domaine !!!
+
 boundary_segments = mesh.get_boundary_segments()
 for segment in boundary_segments:
     tag = getattr(segment, 'tag', None)
     value = dirichlet_value
     for node in segment.get_nodes():
         dirichlet_bcs[node.get_ids()] = value
+'''
 
 dirichlet_value = 0
 
 boundary_segments = [seg for seg in mesh.get_segments() if seg.is_boundary()]
 bounds = [seg for seg in boundary_segments if ((seg.get_tag() == (str('boundary_2'))) or (seg.get_tag() == str('boundary_3'))) ]
-print(bounds)
+print('bounds', bounds, '\n')
 for seg in bounds:
     print(seg.get_tag())
 
@@ -73,12 +79,12 @@ F.plot()
 
 plot_mesh(mesh)
 
-'''
+
 boundary_segs = [seg for seg in mesh.get_segments() if seg.is_boundary()]
 print(f"Nombre de segments de bord : {len(boundary_segs)}")
 for seg in boundary_segs:
     print('\n', seg)
 
-'''
+
 print('\n')
 print(mesh.get_segments())

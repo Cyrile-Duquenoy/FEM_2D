@@ -10,7 +10,7 @@ import numpy as np
 import networkx as nx
 
 class Mesh:
-    def __init__(self, nodes: list[Node] = None, elements: list[Element] = None):
+    def __init__(self, nodes: list[Node] = None, elements: list[Element] = None, segments: list[Segment] = None):
         self._nodes = [] if nodes is None else nodes
         self._elements = [] if elements is None else elements
         self._segments = self.set_all_segments() if segments is None else segments
@@ -93,6 +93,7 @@ class Mesh:
             is_boundary = segment_count[edge_key] == 1
             seg = Segment(n1, n2, ids=i + 1, boundary = is_boundary)
             segments.append(seg)
+            self._segment = segments
         return segments
 
     
