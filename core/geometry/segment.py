@@ -14,7 +14,7 @@ class Segment(Element):
     
     def __repr__(self):
         return self.__str__()
-
+    
     def get_tag(self):
         return self._tag
 

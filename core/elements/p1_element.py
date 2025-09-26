@@ -1,4 +1,5 @@
 from ..geometry.triangle import Triangle
+from ..geometry.node import Node
 import numpy as np
 
 _ref_triangle = None
@@ -9,31 +10,31 @@ def get_ref_triangle():
         try:
             _ref_triangle = Triangle(Node(0,0), Node(1,0), Node(0,1))
         except ValueError:
-            # Node(s) existent déjà, récupère-les depuis la classe Node
-            n0 = Node.get_node(0,0)  # à implémenter : méthode pour récupérer le node existant
+            # Node(s) existent déjà
+            n0 = Node.get_node(0,0)  
             n1 = Node.get_node(1,0)
             n2 = Node.get_node(0,1)
             _ref_triangle = Triangle(n0, n1, n2)
     return _ref_triangle
 
 
-
 class P1Element:
-    def __init__(self, triangle):
+    def __init__(self, triangle: Triangle):
         self.triangle = triangle
-        self.nodes = triangle._nodes
-        self.coords = np.array([node.get_coord() for node in self.nodes])
+        self.ref_triangle = get_ref_triangle()
+        self.nodes = triangle.get_nodes()
+        self.coords = [node.get_coord() for node in self.nodes]
         self.grad_phi, self.area = self.compute_shape_gradients()
         
         if self.area <= 0:
             print(f"Warning: Triangle with negative/zero area: {self.area}")
-
+            
     def compute_shape_gradients(self):
         """
         Calcule les gradients des fonctions de forme linéaires (constantes)
         et l'aire du triangle.
         """
-        p1, p2, p3 = self.coords
+        p1, p2, p3 = self.coords[0], self.coords[1], self.coords[2]
         J = np.array([
             [p2[0] - p1[0], p3[0] - p1[0]],
             [p2[1] - p1[1], p3[1] - p1[1]]
@@ -74,6 +75,4 @@ class P1Element:
         M = np.full((3, 3), A / 12)
         np.fill_diagonal(M, A / 6)
         return M
-    
-
 

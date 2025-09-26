@@ -2,10 +2,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.tri as tri
 
+
 from ..geometry.mesh import Mesh
 
 from .field import Field
-
 
 class ScalarField(Field):
     def __init__(self, mesh: Mesh, data=None):
@@ -43,4 +43,3 @@ class ScalarField(Field):
     
 
     
-

@@ -2,6 +2,7 @@ from enum import Enum
 from .node import Node
 from .triangle import Triangle
 from .mesh import Mesh
+from .segment import Segment
 
 class Geometry(Enum):
     SQUARE = 'SQUARE'
@@ -14,6 +15,7 @@ class Geometry(Enum):
 class Square:
     def __init__(self, h: float, l: float, n: int):
         self._mesh = square_mesh(h, l, n)
+
 
 def square_mesh(h: float, l: float, n: int):
     nodes = []
@@ -55,7 +57,6 @@ def square_mesh(h: float, l: float, n: int):
     return mesh
 
 
-    
 GEOMETRY_MAPPING = {
     Geometry.SQUARE: square_mesh,
     }
