@@ -41,15 +41,3 @@ class Triangle(Element):
     @classmethod 
     def reset_registry(cls):
         cls._registry = []
-<<<<<<< Updated upstream
-=======
-
-
-        
-        
-        
-
-    
->>>>>>> Stashed changes
-
-

@@ -1,8 +1,6 @@
 from ..geometry.triangle import Triangle
 import numpy as np
 
-<<<<<<< Updated upstream
-=======
 _ref_triangle = None
 
 def get_ref_triangle():
@@ -19,7 +17,7 @@ def get_ref_triangle():
     return _ref_triangle
 
 
->>>>>>> Stashed changes
+
 class P1Element:
     def __init__(self, triangle):
         self.triangle = triangle

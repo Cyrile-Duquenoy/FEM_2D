@@ -1,24 +1,16 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
-
+import matplotlib.tri as tri
 
 from ..geometry.mesh import Mesh
 
-import matplotlib.tri as tri
+from .field import Field
 
-class ScalarField:
+
+class ScalarField(Field):
     def __init__(self, mesh: Mesh, data=None):
+        super().__init__(mesh, data)
         self._mesh = mesh
-        nb_nodes = len(mesh.get_nodes())
-        
-        if data is not None:
-            if len(data) != len(mesh.get_nodes()):
-                raise ValueError('len(data) doit être égal au nombre de noeuds')
-            self._data = data
-        else:
-            self._data = [0.0] * len(mesh.get_nodes())
-    
     
     def plot(self, cmap='viridis', method='surface', show=True):
         nodes = np.array([node.get_coord() for node in self._mesh.get_nodes()])
@@ -32,7 +24,6 @@ class ScalarField:
             scatter = plt.scatter(x, y, c=c, cmap=cmap)
             plt.colorbar(scatter, label='Valeur du champ scalaire')
         else:
-            import matplotlib.tri as tri
             triangles = np.array([[node.get_ids() - 1 for node in element._nodes] for element in self._mesh.get_elements()])
             triangulation = tri.Triangulation(x, y, triangles)
             contour = plt.tricontourf(triangulation, c, levels=20, cmap=cmap)
@@ -44,6 +35,8 @@ class ScalarField:
         
         if show:
             plt.show()
+            
+            
 
         
 

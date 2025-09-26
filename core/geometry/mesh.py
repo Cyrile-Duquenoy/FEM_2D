@@ -3,17 +3,15 @@ from .element import Element
 from .segment import Segment
 from .triangle import Triangle
 
-<<<<<<< Updated upstream
-=======
+
 import numpy as np
-import networkx as nx  # utile pour gérer le graphe
->>>>>>> Stashed changes
+import networkx as nx
 
 class Mesh:
     def __init__(self, nodes: list = None, elements: list = None, segments: list = None):
         self._nodes = [] if nodes is None else nodes
         self._elements = [] if elements is None else elements
-        self._segments = [] if segments is None else segments
+        self._segments = self.set_all_segments() if segments is None else segments
         
         
     def add_node(self, node: Node):
@@ -32,7 +30,6 @@ class Mesh:
         return self._elements
     
     def get_segments(self):
-<<<<<<< Updated upstream
         return self._segments
         
     def get_boundary_segments(self):
@@ -40,22 +37,22 @@ class Mesh:
     
         segment_count = defaultdict(int)
         segment_map = {}
-=======
         N = [seg for seg in self._segments]
         return N
     
     def set_all_segments(self):
         from collections import defaultdict
     
-        seen_edges = {}
-        segment_count = defaultdict(int)
->>>>>>> Stashed changes
+        segment_count = defaultdict(int)   # Compte combien de fois chaque arête est vue
+        segment_map = {}                   # Associe chaque arête à ses deux noeuds
     
         for element in self._elements:
             if not isinstance(element, Triangle):
                 continue
     
             nodes = element.get_nodes()
+    
+            # Crée les 3 arêtes d'un triangle
             edges = [
                 (nodes[0], nodes[1]),
                 (nodes[1], nodes[2]),
@@ -63,38 +60,24 @@ class Mesh:
             ]
     
             for n1, n2 in edges:
-<<<<<<< Updated upstream
-                # Tri des IDs pour que l’ordre n’ait pas d’importance
-                id_pair = tuple(sorted((n1.get_ids(), n2.get_ids())))
-                segment_count[id_pair] += 1
-                if id_pair not in segment_map:
-                    segment_map[id_pair] = (n1, n2)
-    
-        self._segments = []
-        for id_pair, count in segment_count.items():
-            if count == 1:
-                n1, n2 = segment_map[id_pair]
-                self._segments.append(Segment(n1, n2))
-    
-        return self._segments
-    
-=======
+                # Clé d'arête : paire d'IDs ordonnée (ordre n'a pas d'importance)
                 edge_key = tuple(sorted((n1.get_ids(), n2.get_ids())))
-                if edge_key not in seen_edges:
-                    seen_edges[edge_key] = (n1, n2)
                 segment_count[edge_key] += 1
+                if edge_key not in segment_map:
+                    segment_map[edge_key] = (n1, n2)
     
+        # Création des segments
         segments = []
-        for i, (edge_key, (n1, n2)) in enumerate(seen_edges.items()):
+        for i, (edge_key, (n1, n2)) in enumerate(segment_map.items()):
             is_boundary = segment_count[edge_key] == 1
-            seg = Segment(n1, n2, ids=i+1, is_boundary=is_boundary)
+            seg = Segment(n1, n2, ids=i + 1, boundary = is_boundary)
             segments.append(seg)
-    
         return segments
+
     
     def get_boundary_segments(self):
         return [s for s in self.get_segments() if s.is_boundary()]
->>>>>>> Stashed changes
+
 
     def get_connectivity_matrix(self):
         connectivity = []
@@ -130,7 +113,6 @@ class Mesh:
                 neighbours[t2].add(t1)
     
         return {k: list(v) for k, v in neighbours.items()}
-    
     
 
     def assign_connected_aligned_tags(self):

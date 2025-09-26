@@ -39,19 +39,19 @@ def square_mesh(h: float, l: float, n: int):
             n4 = n3 + 1
             elements.append(Triangle(nodes[n1], nodes[n2], nodes[n4]))
             elements.append(Triangle(nodes[n1], nodes[n4], nodes[n3]))
-<<<<<<< Updated upstream
+
 
     mesh = Mesh()
     for node in nodes:
         mesh.add_node(node)
     for elmt in elements:
         mesh.add_element(elmt)
-=======
+
        
     mesh = Mesh(nodes, elements)
     mesh.assign_connected_aligned_tags()
     
->>>>>>> Stashed changes
+
     return mesh
 
 

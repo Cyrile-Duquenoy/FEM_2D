@@ -43,9 +43,7 @@ class Node:
         
     def __str__(self):
         return f'Node(id={self.ids}, coord={self.get_coord()})'
-<<<<<<< Updated upstream
-=======
-    
+
     def __repr__(self):
         return f'Node(id={self.ids}, coord={self.get_coord()})'
     
@@ -56,7 +54,6 @@ class Node:
         for i in range(len(node.get_coord())):
             res += (node.get_coord()[i] - self.get_coord()[i])**2
         return np.sqrt(res)
->>>>>>> Stashed changes
 
         
 if __name__ == '__main__':
