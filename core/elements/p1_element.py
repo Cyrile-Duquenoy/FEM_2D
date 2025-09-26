@@ -10,8 +10,8 @@ def get_ref_triangle():
         try:
             _ref_triangle = Triangle(Node(0,0), Node(1,0), Node(0,1))
         except ValueError:
-            # Nodes existent déjà, récupère depuis la classe Node
-            n0 = Node.get_node(0,0)
+            # Node(s) existent déjà
+            n0 = Node.get_node(0,0)  
             n1 = Node.get_node(1,0)
             n2 = Node.get_node(0,1)
             _ref_triangle = Triangle(n0, n1, n2)
@@ -75,5 +75,4 @@ class P1Element:
         M = np.full((3, 3), A / 12)
         np.fill_diagonal(M, A / 6)
         return M
-
 

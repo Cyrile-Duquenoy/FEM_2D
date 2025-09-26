@@ -5,6 +5,6 @@ from .segment import Segment
 from .triangle import Triangle
 from .element import Element
 
-__all__ = ['Geometry', 'Square', 'square_mesh', 'Mesh', 'Node', 'Segment', 'Triangle', 'Element']
+__all__ = ['Geometry', 'Square', 'square_mesh', 'Mesh', 'Node', 'Segment', 'Triangle', 'Element', 'Boundary']
 
 

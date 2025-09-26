@@ -11,10 +11,23 @@ class Element:
     def get_ids(self):
         return self.ids
     
-    def get_dimension(self):
-        return self._nodes[0].get_dimension()
-    
     def __str__(self):
         node_ids = ", ".join(str(n.get_ids()) for n in self._nodes)
         return f"{self.__class__.__name__}(ID={self.ids}, Nodes=[{node_ids}])"
+    
+    def get_diameter(self):
+        diam = 0
+        nodes = self.get_nodes()
+        for i in range(len(nodes)):
+            for j in range(i + 1, len(nodes)):
+                dist = nodes[i].dist(nodes[j])
+                if dist > diam:
+                    diam = dist
+        return diam
+    
+    
+    def is_convex(self):
+        pass
+
+            
     

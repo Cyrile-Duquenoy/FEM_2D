@@ -42,9 +42,6 @@ if __name__ == "__main__":
     # Détection des segments de bord
     boundary_segments = mesh.get_boundary_segments()
     
-    
-    
-
     # Visualisation
     plot_mesh(mesh)
 
